@@ -70,18 +70,5 @@ public class SecondController {
 
     }
 
-
-
-    @GetMapping("/test")
-    public List<String> thirds(
-            @RequestParam List<String> params) {
-        List<String> modifiedParams = params.stream()
-                .map(s -> s.replace(" ", "+"))
-                .toList();
-        return params;
-    }
-
-
-
 }
 

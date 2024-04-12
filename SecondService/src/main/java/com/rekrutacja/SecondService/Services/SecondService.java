@@ -14,6 +14,7 @@ import com.rekrutacja.SecondService.clients.firstServiceClient;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -22,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
+@Aspect
 public class SecondService {
 
     private firstServiceClient client;

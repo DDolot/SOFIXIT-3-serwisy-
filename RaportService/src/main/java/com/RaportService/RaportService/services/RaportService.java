@@ -1,7 +1,10 @@
 package com.RaportService.RaportService.services;
 
 import com.RaportService.RaportService.clients.SecondServiceClient;
+import com.sun.management.OperatingSystemMXBean;
 import org.springframework.stereotype.Service;
+
+import java.lang.management.ManagementFactory;
 
 @Service
 public class RaportService {
@@ -24,4 +27,20 @@ public class RaportService {
    }
    // pozatym nie wiem jak zmierzyć cpu i memory dla każdego z serwisu osobo ?
 
+    public String generatePerformanceReport() {
+        OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        secondServiceClient.fetchConstantData();
+
+
+
+
+
+        // Get CPU and memory usage for each service
+
+        double cpuUsageService1 = osBean.getProcessCpuLoad();
+
+
+        return String.format("CPU load is %.2f%%", cpuUsageService1 * 100);
+
+    }
 }

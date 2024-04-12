@@ -14,7 +14,7 @@ public class RaportController {
     }
 
     @GetMapping("/showraport")
-    public String raport(){
-        return raportService.xD();
+    public String  raport(){
+        return raportService.generatePerformanceReport();
     }
 }

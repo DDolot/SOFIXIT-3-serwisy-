@@ -6,18 +6,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rekrutacja.SecondService.Models.JsonModel;
 
 import com.rekrutacja.SecondService.dtos.JsonModelDTO;
+import com.sun.management.OperatingSystemMXBean;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.web.client.RestTemplate;
 
 
 import java.io.*;
 
+import java.lang.management.ManagementFactory;
 import java.util.*;
 
 import java.util.regex.Matcher;
@@ -289,4 +292,37 @@ class SecondServiceTest {
             System.out.println("No match found.");
         }
     }
+
+    @Test
+    void tt(){
+        // Create a Runnable for fetchData
+        Runnable fetchDataTask = () -> {
+            // Call the fetchData method
+            secondServiceDifferent.fetchData();
+        };
+
+// Create a new thread and pass the fetchDataTask to it
+        Thread fetchDataThread = new Thread(fetchDataTask);
+// Start the thread
+        fetchDataThread.start();
+
+// Rest of your code for measurements retrieval
+        RestTemplate template = new RestTemplate();
+
+        JsonNode cpuRequest = template.getForObject("http://localhost:8081/actuator/metrics/process.cpu.usage", JsonNode.class);
+        double cpuValue = cpuRequest.get("measurements").get(0).get("value").asDouble();
+        double cpuPercentage = cpuValue * 100;
+        System.out.println("CPU Usage: " + cpuPercentage);
+
+        JsonNode memoryRequest = template.getForObject("http://localhost:8081/actuator/metrics/jvm.memory.used", JsonNode.class);
+        System.out.println("Memory Used: " + memoryRequest.get("measurements").get(0).get("value"));
+
+
+
     }
+
+
+    }
+
+
+

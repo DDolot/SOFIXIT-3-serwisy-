@@ -4,12 +4,14 @@ import ch.qos.logback.core.net.server.Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rekrutacja.SecondService.Models.JsonModel;
 import com.rekrutacja.SecondService.clients.*;
+import com.sun.management.OperatingSystemMXBean;
 import net.objecthunter.exp4j.Expression;
 import org.springframework.stereotype.Service;
 import net.objecthunter.exp4j.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -43,46 +45,6 @@ public class SecondServiceDifferent {
                 .collect(Collectors.toList());
 
     }
-
-//    public <T> List<T> fetchData(Class<T> jsonModel){
-//        ObjectMapper om = new ObjectMapper();
-//        List<String> jsons = client.fetchJsonsFromFirstService();
-//
-//        return jsons.stream()
-//                .map(json -> {
-//                    try {
-//                        return om.readValue(json, jsonModel);
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                })
-//                .collect(Collectors.toList());
-//
-//    }
-
-    public String firstEP(){
-        StringWriter csvData = new StringWriter();
-
-
-
-        for(JsonModel json: fetchData()){
-            String row = String.join(",",
-                    json.get_type(),
-                    json.getId().toString(),
-                    json.getName(),
-                    json.getType(),
-                    json.getLatitude().toString(),
-                    json.getLongitude().toString()
-
-
-
-            );
-
-
-            csvData.append(row).append("\n");
-        }
-        return csvData.toString();
-    }
     public String convertToCSV(String[] columns,List<JsonModel> jsonData) {
 
         StringWriter csvData = new StringWriter();
@@ -106,26 +68,7 @@ public class SecondServiceDifferent {
         return csvData.toString();
     }
 
-//    public void calculate(List<String> columns,List<JsonModel> jsonData) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
-//        for(JsonModel json : jsonData){
-//            // expression = latitude*longitude
-//            for(String expresion:columns) {
-//                // CTC = [longitude,latitude]
-//                String[] columnToCalculate = expresion.split("[-+*/]");
-//                // operators = [*]
-//                char[] operators = expresion.replaceAll("[a-zA-Z0-9]", "").toCharArray();
-////
-//                for(String s: columnToCalculate){
-//                    Object columnValue = getColumnValue(json, s);
-//
-//                }
-//
-//        }
-//
-//
-//        }
-//
-//    }
+
 
     private Object getColumnValue(JsonModel json, String column) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String methodName = "get" + column.substring(0, 1).toUpperCase() + column.substring(1);
@@ -159,26 +102,6 @@ public class SecondServiceDifferent {
         return results;
     }
 
-//    public List<Double> calculate(List<String> columns,List<JsonModel> jsonData) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
-//
-//
-//        List<Double> results = new ArrayList<>();
-//            for(JsonModel json:jsonData){
-//            for(String expression:columns){
-//                String[] columnToCalculate = expression.split("[-+*/]");
-//                for(String col:columnToCalculate){
-//                    expression = expression.replace(col, String.valueOf(getColumnValue(json, col)));
-//                }
-//
-//                Expression exp = new ExpressionBuilder(expression).build();
-//                double evaluate = exp.evaluate();
-//                results.add(evaluate);
-//
-//            }
-//
-//
-//    }
-//        return results;
-//    }
+
 
 }
