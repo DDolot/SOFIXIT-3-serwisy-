@@ -20,7 +20,7 @@ public class PositionDTO {
 
     private String name;
 
-    private String fullName;
+    private String fullName = getFullName();
 
     private Boolean airportCode;
 
@@ -45,8 +45,9 @@ public class PositionDTO {
 
     private String distance;
 
-
-
+    public String getFullName() {
+        return name + " " + "Poland";
+    }
 }
 
 

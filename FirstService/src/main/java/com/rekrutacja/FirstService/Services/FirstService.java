@@ -16,9 +16,10 @@ import java.util.*;
 @Service
 public class FirstService {
     private final Faker faker = new Faker();
-    private final Random random = new Random();
+    private static final Random random = new Random();
 
     public String generateJson() {
+
         PositionDTO position = PositionDTO.builder()
                 ._type("Position")
                 .id(random.nextInt(100000))
@@ -57,15 +58,7 @@ public class FirstService {
         }
         return jsonList;
     }
-
-
-
-    private static double generateRandomCoordinate(double min, double max) {
-        Random random = new Random();
+    private double generateRandomCoordinate(double min, double max) {
         return min + (max - min) * random.nextDouble();
     }
-
-
-
-
 }
