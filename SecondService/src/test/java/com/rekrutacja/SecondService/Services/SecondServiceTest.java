@@ -3,13 +3,10 @@ package com.rekrutacja.SecondService.Services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.rekrutacja.SecondService.Models.JsonModel;
+import com.rekrutacja.SecondService.dtos.PositionDTO;
 
-import com.rekrutacja.SecondService.dtos.JsonModelDTO;
-import com.sun.management.OperatingSystemMXBean;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,15 +17,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 
-import java.lang.management.ManagementFactory;
 import java.util.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class SecondServiceTest {
 
@@ -47,12 +42,12 @@ class SecondServiceTest {
 
         //given
         SecondServiceDifferent mockedService = Mockito.mock(SecondServiceDifferent.class);
-        JsonModel json = new JsonModel();
+        PositionDTO json = new PositionDTO();
         json.setId(65483214);
-        json.setGeoPosition(new JsonModel.GeoPosition(51.0855422,16.9987442));
+        json.setGeoPosition(new PositionDTO.GeoPosition(51.0855422,16.9987442));
         json.setLocationId(756423);
     List<String> columns = List.of("latitude*longitude", "sqrt(location_id)");
-    List<JsonModel> jsonData = List.of(json);
+    List<PositionDTO> jsonData = List.of(json);
     Mockito.when(mockedService.calculate(
             columns, jsonData)).thenReturn(List.of(3.0052538,869.7258188));
 
@@ -253,7 +248,7 @@ class SecondServiceTest {
 
         ObjectMapper om = new ObjectMapper();
 
-        JsonModel jsonModel = om.readValue(json, JsonModel.class);
+        PositionDTO jsonModel = om.readValue(json, PositionDTO.class);
 
         System.out.println(jsonModel);
 

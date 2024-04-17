@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.management.ManagementFactory;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class FirstServiceTest {
 
@@ -67,7 +65,8 @@ class FirstServiceTest {
         }
     @Test
     void TT(){
-        System.out.println(generatePerformanceReport());
+        Measurement complatableFutureMeasure = new Measurement(firstService);
+        complatableFutureMeasure.measure(1000);
     }
 
     }

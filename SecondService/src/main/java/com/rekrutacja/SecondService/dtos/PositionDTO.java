@@ -1,17 +1,14 @@
-package com.rekrutacja.SecondService.Models;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.rekrutacja.SecondService.dtos;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
 @JsonPropertyOrder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JsonModel {
+public class PositionDTO {
 
     private String _type;
 

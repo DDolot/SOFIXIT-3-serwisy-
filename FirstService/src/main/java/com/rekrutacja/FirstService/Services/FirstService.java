@@ -7,10 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
-import com.rekrutacja.FirstService.Models.DTO;
 import com.rekrutacja.FirstService.Models.GeoPositionDTO;
 import com.rekrutacja.FirstService.Models.PositionDTO;
-import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,7 +17,6 @@ import java.util.*;
 public class FirstService {
     private final Faker faker = new Faker();
     private final Random random = new Random();
-    PerformanceMonitor pm = new PerformanceMonitor();
 
     public String generateJson() {
         PositionDTO position = PositionDTO.builder()
