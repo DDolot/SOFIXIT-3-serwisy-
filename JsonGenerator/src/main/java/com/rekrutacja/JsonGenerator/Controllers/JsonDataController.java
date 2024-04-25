@@ -12,7 +12,11 @@ public class JsonDataController {
     }
     @GetMapping(value = "/generate/json/{size}")
     public ResponseEntity<String[]> showJsonData(@PathVariable int size) {
+        long startTime = System.currentTimeMillis();
         String[] jsons = jsonGeneratorService.generateJsonList(size);
+        long stopTime = System.currentTimeMillis();
+        System.out.println(jsons[0]);
+        System.out.println(stopTime-startTime);
         return ResponseEntity.ok(jsons);
     }
 

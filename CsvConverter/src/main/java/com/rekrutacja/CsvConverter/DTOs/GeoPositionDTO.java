@@ -1,6 +1,9 @@
-package com.rekrutacja.JsonGenerator.DTOs;
+package com.rekrutacja.CsvConverter.DTOs;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -8,8 +11,8 @@ import lombok.*;
 public class GeoPositionDTO {
 
         @JsonProperty("latitude")
-        private float latitude;
+        protected float latitude;
         @JsonProperty("longitude")
-        private float longitude;
+        protected float longitude;
 
 }

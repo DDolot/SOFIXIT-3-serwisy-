@@ -1,7 +1,14 @@
 server:
   port: 8081
-
+  tomcat:
+    relaxed-path-chars:
+      - "^"
+      - "+"
+    relaxed-query-chars:
+      - "^"
+      - "+"
 application:
   config:
     json-url: http://localhost:8080
+
 

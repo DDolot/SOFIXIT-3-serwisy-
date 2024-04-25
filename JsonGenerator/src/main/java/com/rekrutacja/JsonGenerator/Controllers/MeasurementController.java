@@ -15,7 +15,6 @@ public class MeasurementController {
     }
     @GetMapping(value = "/measurements/{size}")
     public ResponseEntity<MeasurementDTO> getMeasurementsData(@PathVariable int size) {
-
         MeasurementDTO measure = measurement.takeMeasurement(size);
         return ResponseEntity.ok(measure);
     }

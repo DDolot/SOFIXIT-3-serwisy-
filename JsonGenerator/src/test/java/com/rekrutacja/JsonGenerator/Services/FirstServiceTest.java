@@ -1,73 +1,47 @@
 package com.rekrutacja.JsonGenerator.Services;
 
-import com.sun.management.OperatingSystemMXBean;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.lang.management.ManagementFactory;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @SpringBootTest
 class FirstServiceTest {
 
-    private JsonGeneratorService firstService;
+    private JsonGeneratorService jsonGeneratorService;
 
     @BeforeEach
     public void setUp() {
-        firstService = new JsonGeneratorService();
+        jsonGeneratorService = new JsonGeneratorService();
     }
-
-
-        public String generatePerformanceReport() {
-            // Get the OperatingSystemMXBean instance
-            OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-
-            // Get the start time
-            long startTime = System.currentTimeMillis();
-
-            // Perform the CPU-intensive operation
-            firstService.generateJsonList(1000);
-
-            // Get the end time
-            long endTime = System.currentTimeMillis();
-
-            // Calculate the elapsed time
-            long elapsedTime = endTime - startTime;
-
-            // Measure CPU load during the execution of the method
-            double cpuLoadDuringExecution = getAverageCpuLoadDuringExecution(startTime, endTime, osBean);
-
-            // Generate performance report
-            return String.format("CPU load during execution: %.2f%%, Elapsed time: %d ms", cpuLoadDuringExecution/1000000000, elapsedTime);
-        }
-
-        private double getAverageCpuLoadDuringExecution(long startTime, long endTime, OperatingSystemMXBean osBean) {
-            long currentTime = startTime;
-            double totalCpuLoad = 0;
-            int numSamples = 0;
-
-            // Sample CPU load at regular intervals during the execution of the method
-            while (currentTime <= endTime) {
-                double cpuLoad = osBean.getFreeMemorySize();
-                totalCpuLoad += cpuLoad;
-                numSamples++;
-                try {
-                    // Adjust sleep duration based on your requirement
-                    Thread.sleep(1); // Sleep for 100 milliseconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                currentTime = System.currentTimeMillis();
-            }
-
-            // Calculate the average CPU load
-            return totalCpuLoad / numSamples;
-        }
     @Test
-    void TT(){
-        Measurement complatableFutureMeasure = new Measurement(firstService);
+    public void ShouldHaveProperStructureTest() throws JSONException {
+        String randomJsonSample = jsonGeneratorService.generateJson();
+        Pattern compiledPattern = Pattern.compile("\\{\"_type\":\"Position\",\"id\":\\d+,\"key\":null,\"name\":\"[A-Za-z ]+\",\"fullName\":\"[A-Za-z ]+\",\"airportCode\":null,\"type\":\"location\",\"country\":\"Poland\",\"geoPosition\":\\{\"latitude\":[+-]?\\d*\\.?\\d+,\"longitude\":[+-]?\\d*\\.?\\d+},\"locationId\":\\d+,\"inEurope\":true,\"countryCode\":\"[A-Z]+\",\"coreCountry\":true,\"distance\":null}");
+        Matcher matcher = compiledPattern.matcher(randomJsonSample);
+        System.out.println(matcher.find());
+        System.out.println(matcher.matches());
+        assertTrue("json structure is incorrect",matcher.matches());
 
     }
+    @Test
+    public void ListShouldHaveProperSize() {
+        int size = 101;
+        String[] jsons = jsonGeneratorService.generateJsonList(size);
+        assertEquals(jsons.length, size);
+    }
+    @RepeatedTest(25)
+    @Test void ValuesShouldBeInBounds(){
+        float coordinate = jsonGeneratorService.generateRandomCoordinate(-180, 180);
 
+        assertThat(coordinate).isBetween((float) -180,(float) 180);
+
+    }
     }
 

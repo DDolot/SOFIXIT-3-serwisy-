@@ -1,6 +1,7 @@
 package com.rekrutacja.CsvConverter.DTOs;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,11 +9,12 @@ import lombok.NoArgsConstructor;
 @JsonPropertyOrder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PositionDTO {
 
     private String _type;
 
-    private Integer id;
+    private long id;
 
     private Boolean key;
 
@@ -26,41 +28,31 @@ public class PositionDTO {
 
     private String country;
 
-//    private Map<String, Double> geo_position;
+    private GeoPositionDTO geoPosition;
 
-    private GeoPosition geoPosition;
-
-    private Integer locationId;
+    private long locationId;
 
 
-    private Boolean inEurope;
+    private boolean inEurope;
 
     private String countryCode;
 
-    private Boolean coreCountry;
+    private boolean coreCountry;
 
-    private String distance;
+    private Boolean distance;
 
-    public Double getLatitude() {
+    public float getLatitude() {
         return geoPosition.latitude;
     }
-    public Double getLongitude() {
+    public float getLongitude() {
         return geoPosition.longitude;
     }
 
-    public void setGeoPosition(GeoPosition geoPosition) {
+    public void setGeoPosition(GeoPositionDTO geoPosition) {
         this.geoPosition = geoPosition;
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class GeoPosition {
 
-        private Double latitude;
-
-        private Double longitude;
-    }
 
 }
 

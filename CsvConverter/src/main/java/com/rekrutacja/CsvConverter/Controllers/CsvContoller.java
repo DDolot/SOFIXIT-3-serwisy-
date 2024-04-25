@@ -7,6 +7,8 @@ import com.rekrutacja.CsvConverter.Services.CsvConverterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +43,23 @@ public class CsvContoller {
 
 
     @GetMapping("/csv/calculate")
-    public ResponseEntity<List<Double>> third(
-            @RequestParam List<String> params){
+    public ResponseEntity<double[]> third(
+            @RequestParam String[] params){
+
         List<PositionDTO> jsonData = csvConverterService.fetchData();
-        List<String> modifiedParams = params.stream()
-                .map(s -> s.replace(" ", "+"))
-                .toList();
-        return ResponseEntity.ok(csvConverterService.calculate(modifiedParams,jsonData));
+        ResponseEntity<double[]> response
+                = ResponseEntity.ok(csvConverterService.calculate(params, jsonData));
+
+        return response;
     }
 
     @GetMapping("/test")
     public ResponseEntity<Map<String,MeasurementDTO>> test(){
         Map<String,MeasurementDTO> measures = new HashMap<>();
 
-        MeasurementDTO firstServicePerformance = csvConverterService.fetchPerformanceData();
+        ResponseEntity<MeasurementDTO> firstServicePerformance = csvConverterService.fetchPerformanceData();
+        System.out.println(firstServicePerformance.getHeaders());
+        System.out.println(firstServicePerformance.getBody());
 
         long OnetoTwoTimeStart = System.currentTimeMillis();
         List<PositionDTO> jsonData = csvConverterService.fetchData();
@@ -68,7 +73,7 @@ public class CsvContoller {
         MeasurementDTO measurementConvert = measurement.takeMeasurement(futureConvert);
 
         CompletableFuture<Void> futureCalculate = CompletableFuture.runAsync(() -> {
-            List<String> columns = List.of("id","latitude","longitude");
+            String[] columns = {"id+id^12", "sqrt(latitude)/sqrt(id)", "longitude-id"};
             csvConverterService.calculate(columns,jsonData);
 
         });
@@ -77,7 +82,7 @@ public class CsvContoller {
 
         measures.put("convert",measurementConvert);
         measures.put("calculate",measurementCalculate);
-        measures.put("firstServicePerformance",firstServicePerformance);
+//        measures.put("firstServicePerformance",firstServicePerformance);
         return ResponseEntity.ok(measures);
     }
 

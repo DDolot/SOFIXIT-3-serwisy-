@@ -14,13 +14,11 @@ public class JsonGeneratorService {
     private static final Random random = new Random();
 
     public String generateJson() {
-        String name = faker.name().fullName();
         PositionDTO position = PositionDTO.builder()
                 ._type("Position")
-                .id(random.nextInt(100000))
+                .id(random.nextInt(100000000))
                 .key(null)
-                .name(name)
-                .fullName(name + " " + "Poland")
+                .name(faker.name().fullName())
                 .airportCode(null)
                 .type("location")
                 .country("Poland")
@@ -29,7 +27,7 @@ public class JsonGeneratorService {
                         generateRandomCoordinate(-90,90),
                         generateRandomCoordinate(-180,180)
                 ))
-                .locationId(10000)
+                .locationId(random.nextInt(1_000_000))
                 .inEurope(true)
                 .countryCode("PL")
                 .coreCountry(true)
@@ -41,16 +39,13 @@ public class JsonGeneratorService {
             throw new RuntimeException(e);
         }
 
+    }public String[] generateJsonList(int size) {
+        return Arrays.stream(new String[size])
+                .parallel()
+                .map(i -> generateJson())
+                .toArray(String[]::new);
     }
-
-    public String[] generateJsonList(int size) {
-        String[] jsonList = new String[size];
-         for (int i = 0; i < size; i++) {
-            jsonList[i] = (generateJson());
-        }
-        return jsonList;
-    }
-    private double generateRandomCoordinate(double min, double max) {
-        return min + (max - min) * random.nextDouble();
+    public float generateRandomCoordinate(float min, float max) {
+        return min + (max - min) * random.nextFloat();
     }
 }

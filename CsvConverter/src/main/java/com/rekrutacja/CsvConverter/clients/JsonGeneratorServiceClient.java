@@ -2,6 +2,7 @@ package com.rekrutacja.CsvConverter.clients;
 
 import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -11,8 +12,8 @@ public interface JsonGeneratorServiceClient {
 
     @GetMapping("/generate/json/10000")
     List<String> fetchJsonsFromFirstService();
-    @GetMapping("/measurements/1000")
-    MeasurementDTO fetchPerformanceData();
+    @GetMapping("/measurements/100000")
+    ResponseEntity<MeasurementDTO> fetchPerformanceData();
 
 
 }

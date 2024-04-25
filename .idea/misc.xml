@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -7,6 +8,8 @@
         <option value="$PROJECT_DIR$/SecondService/pom.xml" />
         <option value="$PROJECT_DIR$/demo/untitled/pom.xml" />
         <option value="$PROJECT_DIR$/RaportService/pom.xml" />
+        <option value="$PROJECT_DIR$/JsonGenerator/pom.xml" />
+        <option value="$PROJECT_DIR$/CsvConverter/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
