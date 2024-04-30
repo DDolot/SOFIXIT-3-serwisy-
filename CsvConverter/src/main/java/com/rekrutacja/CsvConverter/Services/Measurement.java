@@ -13,25 +13,19 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class Measurement {
 
-    private CsvConverterService secondServiceDifferent;
-    private final OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
-    public Measurement(CsvConverterService secondServiceDifferent) {
-        this.secondServiceDifferent = secondServiceDifferent;
-    }
-
+    private final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
     public MeasurementDTO takeMeasurement(CompletableFuture<Void> future){
 
         List<Double> cpuLoads = new ArrayList<>();
         List<Double> memory = new ArrayList<>();
-        long startTime = System.currentTimeMillis();
 
         boolean measure = true;
 
         while (measure) {
 
-            double cpuLoad = osBean.getProcessCpuLoad();
-            long usedMemory = osBean.getTotalMemorySize() - osBean.getFreeMemorySize();
+            double cpuLoad = OSBEAN.getProcessCpuLoad();
+            long usedMemory = OSBEAN.getTotalMemorySize() - OSBEAN.getFreeMemorySize();
 
             cpuLoads.add(cpuLoad * 100);
             memory.add((double) usedMemory/1000000);
@@ -47,9 +41,8 @@ public class Measurement {
 
         }
         future.join();
-        long stopTime = System.currentTimeMillis();
-        long duration = (stopTime - startTime);
 
-        return new MeasurementDTO(cpuLoads,memory,duration);
+
+        return new MeasurementDTO(cpuLoads,memory,0);
     }
 }

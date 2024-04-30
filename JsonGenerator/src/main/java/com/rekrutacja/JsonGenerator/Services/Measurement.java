@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 public class Measurement {
     @Autowired
     private JsonGeneratorService jsonGeneratorService;
-    private final OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+    private final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
     public Measurement(JsonGeneratorService jsonGeneratorService) {
         this.jsonGeneratorService = jsonGeneratorService;
@@ -23,36 +23,19 @@ public class Measurement {
     public MeasurementDTO takeMeasurement(int size) {
         List<Double> cpuLoads = new ArrayList<>();
         List<Double> memory = new ArrayList<>();
-        long startTime = System.currentTimeMillis();
         CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-
             jsonGeneratorService.generateJsonList(size);
-
         });
 
-        boolean measure = true;
-
-        while (measure) {
-            double cpuLoad = osBean.getProcessCpuLoad();
-            long usedMemory = osBean.getTotalMemorySize() - osBean.getFreeMemorySize();
+        while (!future.isDone()) {
+            double cpuLoad = OSBEAN.getProcessCpuLoad();
+            long usedMemory = OSBEAN.getTotalMemorySize() - OSBEAN.getFreeMemorySize();
 
             cpuLoads.add(cpuLoad * 100);
-            memory.add((double) usedMemory/1000000);
+            memory.add((double) usedMemory / (1024 * 1024));
 
-            if (future.isDone()) {
-                measure = false;
-            }
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
-        future.join();
-        long stopTime = System.currentTimeMillis();
-        long duration = (stopTime - startTime);
-
-        return new MeasurementDTO(cpuLoads,memory,duration);
+        return new MeasurementDTO(cpuLoads,memory);
     }
 }

@@ -25,8 +25,7 @@ class FirstServiceTest {
         String randomJsonSample = jsonGeneratorService.generateJson();
         Pattern compiledPattern = Pattern.compile("\\{\"_type\":\"Position\",\"id\":\\d+,\"key\":null,\"name\":\"[A-Za-z ]+\",\"fullName\":\"[A-Za-z ]+\",\"airportCode\":null,\"type\":\"location\",\"country\":\"Poland\",\"geoPosition\":\\{\"latitude\":[+-]?\\d*\\.?\\d+,\"longitude\":[+-]?\\d*\\.?\\d+},\"locationId\":\\d+,\"inEurope\":true,\"countryCode\":\"[A-Z]+\",\"coreCountry\":true,\"distance\":null}");
         Matcher matcher = compiledPattern.matcher(randomJsonSample);
-        System.out.println(matcher.find());
-        System.out.println(matcher.matches());
+
         assertTrue("json structure is incorrect",matcher.matches());
 
     }

@@ -17,74 +17,40 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class CsvContoller {
     private CsvConverterService csvConverterService;
-    private Measurement measurement;
-    public CsvContoller(Measurement measurement, CsvConverterService csvConverterService) {
-        this.measurement = measurement;
+
+    public CsvContoller(CsvConverterService csvConverterService) {
         this.csvConverterService = csvConverterService;
     }
 
-    @GetMapping("/csv/constant")
-    public ResponseEntity<String> first(){
-        List<PositionDTO> jsonData = csvConverterService.fetchData();
-        String[] columns = {"_type","id","name","type","latitude","longitude"};
-        String csvData = csvConverterService.convertToCSV(columns,jsonData);
-        return ResponseEntity.ok(csvData);
-    }
-    @GetMapping("/csv/structure")
-    public ResponseEntity<String> second(
-            @RequestParam String[] params){
-        List<PositionDTO> jsonData = csvConverterService.fetchData();
+//    @GetMapping("/csv/constant")
+//    public ResponseEntity<String> first(){
+//        List<PositionDTO> jsonData = csvConverterService.fetchData();
+//        String[] columns = {"_type","id","name","type","latitude","longitude"};
+//        String csvData = csvConverterService.convertToCSV(columns,jsonData);
+//        return ResponseEntity.ok(csvData);
+//    }
+//    @GetMapping("/csv/structure")
+//    public ResponseEntity<String> second(
+//            @RequestParam String[] params){
+//        List<PositionDTO> jsonData = csvConverterService.fetchData();
+//        String csvData = csvConverterService.convertToCSV(params,jsonData);
+//        return ResponseEntity.ok(csvData);
+//    }
+//
+//
+//
+//
+//    @GetMapping("/csv/calculate")
+//    public ResponseEntity<double[]> third(
+//            @RequestParam String[] params){
+//        List<PositionDTO> jsonData = csvConverterService.fetchData();
+//        ResponseEntity<double[]> response
+//                = ResponseEntity.ok(csvConverterService.calculate(params,jsonData));
+//
+//        return response;
+//    }
 
-        String csvData = csvConverterService.convertToCSV(params,jsonData);
-        return ResponseEntity.ok(csvData);
-    }
 
-
-
-
-    @GetMapping("/csv/calculate")
-    public ResponseEntity<double[]> third(
-            @RequestParam String[] params){
-
-        List<PositionDTO> jsonData = csvConverterService.fetchData();
-        ResponseEntity<double[]> response
-                = ResponseEntity.ok(csvConverterService.calculate(params, jsonData));
-
-        return response;
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<Map<String,MeasurementDTO>> test(){
-        Map<String,MeasurementDTO> measures = new HashMap<>();
-
-        ResponseEntity<MeasurementDTO> firstServicePerformance = csvConverterService.fetchPerformanceData();
-        System.out.println(firstServicePerformance.getHeaders());
-        System.out.println(firstServicePerformance.getBody());
-
-        long OnetoTwoTimeStart = System.currentTimeMillis();
-        List<PositionDTO> jsonData = csvConverterService.fetchData();
-        long sOnetoTwoTimeStop = System.currentTimeMillis();
-
-        CompletableFuture<Void> futureConvert = CompletableFuture.runAsync(() -> {
-            String[] columns = {"_type","id","name","type","latitude","longitude"};
-            csvConverterService.convertToCSV(columns,jsonData);
-
-        });
-        MeasurementDTO measurementConvert = measurement.takeMeasurement(futureConvert);
-
-        CompletableFuture<Void> futureCalculate = CompletableFuture.runAsync(() -> {
-            String[] columns = {"id+id^12", "sqrt(latitude)/sqrt(id)", "longitude-id"};
-            csvConverterService.calculate(columns,jsonData);
-
-        });
-
-        MeasurementDTO measurementCalculate = measurement.takeMeasurement(futureCalculate);
-
-        measures.put("convert",measurementConvert);
-        measures.put("calculate",measurementCalculate);
-//        measures.put("firstServicePerformance",firstServicePerformance);
-        return ResponseEntity.ok(measures);
-    }
 
 }
 

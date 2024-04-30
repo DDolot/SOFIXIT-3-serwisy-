@@ -12,9 +12,6 @@ import java.util.List;
 public class MeasurementDTO {
     private List<Double> processCpuLoad;
     private List<Double> usedMemorySize;
-    private long time;
-
-
 }
 
 
