@@ -8,8 +8,8 @@ import lombok.*;
 public class GeoPositionDTO {
 
         @JsonProperty("latitude")
-        private float latitude;
+        private double latitude;
         @JsonProperty("longitude")
-        private float longitude;
+        private double longitude;
 
 }

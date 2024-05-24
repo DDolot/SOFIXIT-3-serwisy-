@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -27,27 +24,26 @@ import java.util.stream.Collectors;
 @Service
 public class CsvConverterService {
     private JsonGeneratorServiceClient client;
+    private final ObjectMapper OM = new ObjectMapper();
     public CsvConverterService(JsonGeneratorServiceClient client) {
         this.client = client;
     }
 
     @SneakyThrows(RuntimeException.class)
-    public List<PositionDTO> fetchData() {
-        ObjectMapper om = new ObjectMapper();
-        List<String> jsons = client.fetchJsonsFromFirstService();
-        return jsons.stream()
+    public PositionDTO[] fetchData() {
+        String[] jsons = client.fetchJsonsFromFirstService();
+        return Arrays.stream(jsons)
                 .map(json -> {
                     try {
-                        return om.readValue(json, PositionDTO.class);
+                        return OM.readValue(json, PositionDTO.class);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                })
-                .collect(Collectors.toList());
+                }).toArray(PositionDTO[]::new);
 
     }
 
-    public String convertToCSV(String[] columns,List<PositionDTO> jsonData) {
+    public String convertToCSV(String[] columns,PositionDTO[] jsonData) {
         StringWriter csvData = new StringWriter();
         for (PositionDTO json : jsonData) {
             List<String> rowData = new ArrayList<>();
@@ -67,14 +63,14 @@ public class CsvConverterService {
     }
 
     private Object getColumnValue(PositionDTO dto, String column) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> map = objectMapper.convertValue(dto, new TypeReference<Map<String, Object>>() {
+
+        Map<String, Object> map = OM.convertValue(dto, new TypeReference<Map<String, Object>>() {
         });
         return map.get(column);
     }
 
-    public double[] calculate(String[] columns,List<PositionDTO> jsonData) {
-        int resultSize = jsonData.size();
+    public double[] calculate(String[] columns,PositionDTO[] jsonData) {
+        int resultSize = jsonData.length;
         int expressionsSize = columns.length;
         double[] results = new double[resultSize * expressionsSize];
         int i = 0;
@@ -99,10 +95,6 @@ public class CsvConverterService {
         }
 
         return results;
-    }
-
-    public MeasurementDTO fetchPerformanceData() {
-        return client.fetchPerformanceData();
     }
 
 

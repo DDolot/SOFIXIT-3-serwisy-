@@ -10,13 +10,13 @@ import java.util.*;
 
 @Service
 public class JsonGeneratorService {
-    private final Faker faker = new Faker();
-    private static final Random random = new Random();
+    private static final Faker faker = new Faker();
+//    private static final Random random = new Random();
 
     public String generateJson() {
         PositionDTO position = PositionDTO.builder()
                 ._type("Position")
-                .id(random.nextInt(100000000))
+                .id(faker.random().nextInt(1000000))
                 .key(null)
                 .name(faker.name().fullName())
                 .airportCode(null)
@@ -27,10 +27,10 @@ public class JsonGeneratorService {
                         generateRandomCoordinate(-90,90),
                         generateRandomCoordinate(-180,180)
                 ))
-                .locationId(random.nextInt(1_000_000))
-                .inEurope(true)
+                .locationId(faker.random().nextInt(1000000))
+                .inEurope(faker.random().nextBoolean())
                 .countryCode("PL")
-                .coreCountry(true)
+                .coreCountry(faker.random().nextBoolean())
                 .distance(null)
                 .build();
         try {
@@ -40,12 +40,13 @@ public class JsonGeneratorService {
         }
 
     }public String[] generateJsonList(int size) {
+
         return Arrays.stream(new String[size])
                 .parallel()
-                .map(i -> generateJson())
+                .map(json -> generateJson())
                 .toArray(String[]::new);
     }
-    public float generateRandomCoordinate(float min, float max) {
-        return min + (max - min) * random.nextFloat();
+    public double generateRandomCoordinate(double min, double max) {
+        return min + (max - min) * faker.random().nextDouble();
     }
 }

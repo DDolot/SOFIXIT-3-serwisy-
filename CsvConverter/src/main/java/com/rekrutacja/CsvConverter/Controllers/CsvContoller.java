@@ -4,6 +4,7 @@ import com.rekrutacja.CsvConverter.Services.Measurement;
 import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
 import com.rekrutacja.CsvConverter.DTOs.PositionDTO;
 import com.rekrutacja.CsvConverter.Services.CsvConverterService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,35 +23,32 @@ public class CsvContoller {
         this.csvConverterService = csvConverterService;
     }
 
-//    @GetMapping("/csv/constant")
-//    public ResponseEntity<String> first(){
-//        List<PositionDTO> jsonData = csvConverterService.fetchData();
-//        String[] columns = {"_type","id","name","type","latitude","longitude"};
-//        String csvData = csvConverterService.convertToCSV(columns,jsonData);
-//        return ResponseEntity.ok(csvData);
-//    }
-//    @GetMapping("/csv/structure")
-//    public ResponseEntity<String> second(
-//            @RequestParam String[] params){
-//        List<PositionDTO> jsonData = csvConverterService.fetchData();
-//        String csvData = csvConverterService.convertToCSV(params,jsonData);
-//        return ResponseEntity.ok(csvData);
-//    }
-//
-//
-//
-//
-//    @GetMapping("/csv/calculate")
-//    public ResponseEntity<double[]> third(
-//            @RequestParam String[] params){
-//        List<PositionDTO> jsonData = csvConverterService.fetchData();
-//        ResponseEntity<double[]> response
-//                = ResponseEntity.ok(csvConverterService.calculate(params,jsonData));
-//
-//        return response;
-//    }
 
 
+    @GetMapping(value = "/csv/constant")
+    public ResponseEntity<String> first(){
+        PositionDTO[] jsonData = csvConverterService.fetchData();
+        String[] columns = {"_type","id","name","type","latitude","longitude"};
+        String csvData = csvConverterService.convertToCSV(columns,jsonData);
+        return ResponseEntity.ok(csvData);
+
+    }
+    @GetMapping("/csv/structure")
+    public ResponseEntity<String> second(
+            @RequestParam String[] params){
+        PositionDTO[] jsonData = csvConverterService.fetchData();
+        String csvData = csvConverterService.convertToCSV(params,jsonData);
+        return ResponseEntity.ok(csvData);
+    }
+    @GetMapping("/csv/calculate")
+    public ResponseEntity<double[]> third(
+            @RequestParam String[] params){
+        PositionDTO[] jsonData = csvConverterService.fetchData();
+        ResponseEntity<double[]> response
+                = ResponseEntity.ok(csvConverterService.calculate(params,jsonData));
+
+        return response;
+    }
 
 }
 

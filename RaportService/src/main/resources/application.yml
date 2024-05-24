@@ -2,4 +2,7 @@ server:
     port: 8082
 application:
     config:
-        json-url: http://localhost:8080
+        json-url: http://localhost:8081
+
+
+

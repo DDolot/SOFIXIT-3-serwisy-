@@ -8,8 +8,8 @@ import java.util.List;
 @FeignClient(name = "json-service",url = "${application.config.json-url}")
 public interface SecondServiceClient {
 
-    @GetMapping("/generate/json/100")
-    String[] fetchConstantData();
+    @GetMapping("/csv/constant")
+    String fetchConstantData();
 
 
 }

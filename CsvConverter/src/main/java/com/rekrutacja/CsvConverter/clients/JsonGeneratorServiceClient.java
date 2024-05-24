@@ -11,9 +11,8 @@ import java.util.List;
 public interface JsonGeneratorServiceClient {
 
     @GetMapping("/generate/json/100000")
-    List<String> fetchJsonsFromFirstService();
-    @GetMapping("/measurements/100000")
+    String[] fetchJsonsFromFirstService();
+    @GetMapping("/measurements/1000")
     MeasurementDTO fetchPerformanceData();
-
 
 }

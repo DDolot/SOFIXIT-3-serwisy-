@@ -3,46 +3,51 @@ package com.rekrutacja.CsvConverter.Services;
 
 import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
 import com.sun.management.OperatingSystemMXBean;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.search.RequiredSearch;
 import org.springframework.stereotype.Component;
 
+import javax.management.MBeanInfo;
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Component
 public class Measurement {
+    private List<Double> cpuLoads = new ArrayList<>();
+    private List<Double> memory = new ArrayList<>();
+    private static final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+    private MeterRegistry registry;
+    private static final long totalMemory = OSBEAN.getTotalMemorySize();
 
+    public Measurement(MeterRegistry registry) {
+        this.registry = registry;
+    }
 
-    private final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-    public MeasurementDTO takeMeasurement(CompletableFuture<Void> future){
+    public MeasurementDTO takeMeasurement(CompletableFuture<Object> future){
+        Instant start = Instant.now();
+        while (!future.isDone()) {
 
-        List<Double> cpuLoads = new ArrayList<>();
-        List<Double> memory = new ArrayList<>();
+            double cpuLoad = OSBEAN.getSystemCpuLoad();
 
-        boolean measure = true;
-
-        while (measure) {
-
-            double cpuLoad = OSBEAN.getProcessCpuLoad();
-            long usedMemory = OSBEAN.getTotalMemorySize() - OSBEAN.getFreeMemorySize();
-
+            long usedMemory = totalMemory - OSBEAN.getFreeMemorySize();
+            // wez registy memory bo to jest choojnia jakaś
             cpuLoads.add(cpuLoad * 100);
-            memory.add((double) usedMemory/1000000);
-
-            if (future.isDone()) {
-                measure = false;
-            }
+            memory.add((double) usedMemory/(1024*1024));
+            RequiredSearch requiredSearch = registry.get("jvm.memory.used");
+            System.out.println(requiredSearch.gauge().value());
             try {
-                Thread.sleep(10);
+                Thread.sleep(250);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
         }
-        future.join();
-
-
-        return new MeasurementDTO(cpuLoads,memory,0);
+        Instant stop = Instant.now();
+        return new MeasurementDTO(cpuLoads,memory, Duration.between(start,stop).toMillis());
     }
 }

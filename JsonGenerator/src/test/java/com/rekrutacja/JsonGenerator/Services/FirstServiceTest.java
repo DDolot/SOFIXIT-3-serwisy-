@@ -37,9 +37,9 @@ class FirstServiceTest {
     }
     @RepeatedTest(25)
     @Test void ValuesShouldBeInBounds(){
-        float coordinate = jsonGeneratorService.generateRandomCoordinate(-180, 180);
+        double coordinate = jsonGeneratorService.generateRandomCoordinate(-180, 180);
 
-        assertThat(coordinate).isBetween((float) -180,(float) 180);
+        assertThat(coordinate).isBetween(-180.0,180.0);
 
     }
     }

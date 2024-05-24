@@ -11,4 +11,8 @@ application:
   config:
     json-url: http://localhost:8080
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
