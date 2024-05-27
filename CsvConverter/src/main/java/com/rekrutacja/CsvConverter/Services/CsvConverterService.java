@@ -8,6 +8,8 @@ import com.rekrutacja.CsvConverter.clients.*;
 import lombok.SneakyThrows;
 import net.objecthunter.exp4j.Expression;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import net.objecthunter.exp4j.*;
@@ -29,10 +31,11 @@ public class CsvConverterService {
         this.client = client;
     }
 
-    @SneakyThrows(RuntimeException.class)
+
     public PositionDTO[] fetchData() {
         String[] jsons = client.fetchJsonsFromFirstService();
-        return Arrays.stream(jsons)
+
+        PositionDTO[] positionDTOS = Arrays.stream(jsons)
                 .map(json -> {
                     try {
                         return OM.readValue(json, PositionDTO.class);
@@ -41,6 +44,7 @@ public class CsvConverterService {
                     }
                 }).toArray(PositionDTO[]::new);
 
+        return positionDTOS;
     }
 
     public String convertToCSV(String[] columns,PositionDTO[] jsonData) {

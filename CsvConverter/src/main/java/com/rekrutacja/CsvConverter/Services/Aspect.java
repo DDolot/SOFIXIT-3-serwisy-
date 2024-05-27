@@ -1,76 +1,78 @@
-package com.rekrutacja.CsvConverter;
+package com.rekrutacja.CsvConverter.Services;
 
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
-import com.rekrutacja.CsvConverter.Services.Measurement;
-import com.rekrutacja.CsvConverter.Services.MeasurementActuator;
-import io.micrometer.core.instrument.DistributionSummary;
-import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.micrometer.core.instrument.binder.BaseUnits;
-import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.management.ManagementFactory;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import com.sun.management.OperatingSystemMXBean;
 
 @org.aspectj.lang.annotation.Aspect
 @Component
-public class Aspect {
+    public class Aspect {
 
-    private final Timer timer;
-    private final Timer timerMethods;
 
-    private final static Logger logger = LoggerFactory.getLogger(Aspect.class);
-    private MeterRegistry registry;
+        private MeterRegistry registry;
+    private static final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+
 
     private final String serviceMethods = "execution(* com.rekrutacja.CsvConverter.Services.*.convertToCSV(..))";
-    private Measurement measurement;
-    private List<Double> cpus = new ArrayList<>();
-    private List<Long> memory = new ArrayList<>();
-    private OperatingSystemMXBean OSBEAN = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        private Measurement measurement;
 
-    public Aspect(MeterRegistry registry,Measurement measurement) {
-        this.measurement = measurement;
-        this.timer = registry.timer("fetch.data.from.first.service");
-        this.timerMethods = registry.timer("execute.service.methods");
-        this.registry = registry;
+
+        public Aspect(MeterRegistry registry,Measurement measurement) {
+            this.measurement = measurement;
+
+            this.registry = registry;
+
+
+        }
+        @Around("execution(* com.rekrutacja.CsvConverter.clients.*.fetchJsonsFromFirstService(..))")
+        public Object aroundFetchJsonsFromFirstService(ProceedingJoinPoint jp) throws Throwable {
+            CompletableFuture<Object> futureProcessMethod = CompletableFuture
+                    .supplyAsync(() -> {
+                        try {
+                            return jp.proceed();
+                        } catch (Throwable e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+            System.out.println(measurement.takeMeasurement("fetch", futureProcessMethod));
+
+            Object resultJsonsData = futureProcessMethod.get();
+            return resultJsonsData;
+        }
+    @Around("execution(* com.rekrutacja.CsvConverter.Services.CsvConverterService.*(..)) && !execution(* com.rekrutacja.CsvConverter.Services.CsvConverterService.fetchData(..))")
+    public Object aroundServiceMethods(ProceedingJoinPoint jp) throws Throwable {
+            CompletableFuture<Object> futureProcessMethod = CompletableFuture
+                    .supplyAsync(() -> {
+                        try {
+                            return jp.proceed();
+                        } catch (Throwable e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        System.out.println("calculate");
+        System.out.println(measurement.takeMeasurement("calc", futureProcessMethod));
+
+
+        Object resultJsonsData = futureProcessMethod.get();
+            return resultJsonsData;
+        }
+
+
+
+
 
 
     }
-
-    @Around("execution(* com.rekrutacja.CsvConverter.clients.*.fetchJsonsFromFirstService(..))")
-    public Object aroundC(ProceedingJoinPoint jp) throws Throwable {
-        CompletableFuture<Object> futureProcessMethod = CompletableFuture
-                .supplyAsync(() -> {
-                    try {
-                        return jp.proceed();
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        MeasurementDTO measurementDTO = measurement.takeMeasurement(futureProcessMethod);
-        System.out.println(measurementDTO);
-        return futureProcessMethod.get();
-    }
-}
 //
 //
 //
