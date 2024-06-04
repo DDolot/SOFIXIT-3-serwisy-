@@ -1,38 +1,39 @@
 package com.rekrutacja.CsvConverter.Services;
 
+import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
+import com.sun.management.OperatingSystemMXBean;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Timer;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.management.ManagementFactory;
-
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import com.sun.management.OperatingSystemMXBean;
 
 @org.aspectj.lang.annotation.Aspect
 @Component
-    public class Aspect {
-
-
-        private MeterRegistry registry;
-    private static final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-
+    public class Aspect implements Observer{
 
     private final String serviceMethods = "execution(* com.rekrutacja.CsvConverter.Services.*.convertToCSV(..))";
         private Measurement measurement;
+        private MeasurementDTO fetch;
+        private MeasurementDTO calculate;
+        private MeasurementDTO convert;
+        private  Long time;
+    private static final OperatingSystemMXBean OSBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
+    private static final long totalMemory = OSBEAN.getTotalMemorySize();
 
-        public Aspect(MeterRegistry registry,Measurement measurement) {
+        public Aspect(Measurement measurement) {
             this.measurement = measurement;
 
-            this.registry = registry;
-
-
         }
+
         @Around("execution(* com.rekrutacja.CsvConverter.clients.*.fetchJsonsFromFirstService(..))")
         public Object aroundFetchJsonsFromFirstService(ProceedingJoinPoint jp) throws Throwable {
             CompletableFuture<Object> futureProcessMethod = CompletableFuture
@@ -44,13 +45,15 @@ import com.sun.management.OperatingSystemMXBean;
                         }
                     });
 
-            System.out.println(measurement.takeMeasurement("fetch", futureProcessMethod));
+            fetch = takeMeasurement(futureProcessMethod);
 
-            Object resultJsonsData = futureProcessMethod.get();
-            return resultJsonsData;
+            return futureProcessMethod.get();
         }
-    @Around("execution(* com.rekrutacja.CsvConverter.Services.CsvConverterService.*(..)) && !execution(* com.rekrutacja.CsvConverter.Services.CsvConverterService.fetchData(..))")
-    public Object aroundServiceMethods(ProceedingJoinPoint jp) throws Throwable {
+
+
+
+    @Around("execution(* com.rekrutacja.CsvConverter.Services.CsvConverterService.calculate(..)))")
+    public Object aroundCalculate(ProceedingJoinPoint jp) throws Throwable {
             CompletableFuture<Object> futureProcessMethod = CompletableFuture
                     .supplyAsync(() -> {
                         try {
@@ -59,20 +62,83 @@ import com.sun.management.OperatingSystemMXBean;
                             throw new RuntimeException(e);
                         }
                     });
-        System.out.println("calculate");
-        System.out.println(measurement.takeMeasurement("calc", futureProcessMethod));
 
 
-        Object resultJsonsData = futureProcessMethod.get();
-            return resultJsonsData;
+        calculate = takeMeasurement(futureProcessMethod);
+
+
+        return futureProcessMethod.get();
+        }
+        @Around("execution(* com.rekrutacja.CsvConverter.Services.CsvConverterService.convertToCSV(..)))")
+        public Object aroundConvertToCsv(ProceedingJoinPoint jp) throws Throwable {
+            CompletableFuture<Object> futureProcessMethod = CompletableFuture
+                    .supplyAsync(() -> {
+                        try {
+                            return jp.proceed();
+                        } catch (Throwable e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+
+        convert = takeMeasurement(futureProcessMethod);
+
+
+        return futureProcessMethod.get();
         }
 
 
-
-
-
-
+    @Override
+    public MeasurementDTO getFetch() {
+        return fetch;
     }
+
+    @Override
+    public MeasurementDTO getCalculate() {
+        return calculate;
+    }
+
+    @Override
+    public MeasurementDTO getConvert() {
+        return convert;
+    }
+    @Override
+    public MeasurementDTO takeMeasurement(CompletableFuture<Object> future){
+        ArrayList<Double> cpuLoads = new ArrayList<>();
+        ArrayList<Double> memory = new ArrayList<>();
+        Instant start = Instant.now();
+
+        while (!future.isDone()) {
+
+            double cpuLoad = OSBEAN.getSystemCpuLoad();
+
+            long usedMemory = totalMemory - OSBEAN.getFreeMemorySize();
+            // wez registy memory bo to jest choojnia jakaś
+            cpuLoads.add(cpuLoad * 100);
+            memory.add((double) usedMemory/(1024*1024));
+
+            try {
+                Thread.sleep(250);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        Instant stop = Instant.now();
+        time = Duration.between(start, stop).toMillis();
+        MeasurementDTO measurementDTO = new MeasurementDTO();
+        measurementDTO.setProcessCpuLoad(cpuLoads);
+        measurementDTO.setUsedMemorySize(memory);
+        measurementDTO.setTime(time);
+
+
+
+        return measurementDTO;
+    }
+
+
+}
 //
 //
 //

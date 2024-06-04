@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 @Data
-public class Measurement {
+public class Measurement{
     private  List<Double> cpuLoads = new ArrayList<>();
     private  List<Double> memory = new ArrayList<>();
     private  Long time;
@@ -30,9 +30,11 @@ public class Measurement {
     private static final long totalMemory = OSBEAN.getTotalMemorySize();
 
 
-
-    protected Map<String,MeasurementDTO> takeMeasurement(String methodName,CompletableFuture<Object> future){
+    protected MeasurementDTO takeMeasurement(CompletableFuture<Object> future){
+        cpuLoads = new ArrayList<>();
+        memory = new ArrayList<>();
         Instant start = Instant.now();
+
         while (!future.isDone()) {
 
             double cpuLoad = OSBEAN.getSystemCpuLoad();
@@ -56,8 +58,11 @@ public class Measurement {
         measurementDTO.setProcessCpuLoad(cpuLoads);
         measurementDTO.setUsedMemorySize(memory);
         measurementDTO.setTime(time);
-        Map<String,MeasurementDTO> map = new HashMap<>();
-        map.put(methodName,measurementDTO);
-        return map;
+
+
+
+        return measurementDTO;
     }
+
+
 }

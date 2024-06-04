@@ -3,11 +3,15 @@ package com.RaportService.RaportService.controllers;
 import com.RaportService.RaportService.clients.SecondServiceClient;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
-
-
+import java.util.List;
 
 
 @RestController
@@ -15,35 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class RaportController {
 
     private SecondServiceClient client;
+    @Autowired
+    private RestTemplate restTemplate;
+
 
     public RaportController(SecondServiceClient client) {
         this.client = client;
+
     }
 
+    @GetMapping("/showraport")
+    public String raport() {
+        String url = "http://localhost:8081" + "/csv/calculate?params=id+2";
+        ResponseEntity<double[]> response = restTemplate.getForEntity(url, double[].class);
 
-
-
-        @GetMapping("/showraport")
-    public String  raport(){
-        return client.fetchConstantData();
+        System.out.println(response.getHeaders());
+        return response.getHeaders().getFirst("JsonGeneratorServicePerformance");
     }
-//    @GetMapping("/s")
-//
-//    public RecordingStream raport() throws IOException,ParseException {
-//        Configuration c = Configuration.getConfiguration("default");
-//        try (var rs = new RecordingStream(c)) {
-//            // Konfiguracja profiler'a - wybierz zdarzenia do śledzenia
-//            rs.enable("jdk.CPULoad").withPeriod(Duration.ofMillis(1));
-//            rs.enable("jdk.JVMInformation");
-//
-//            // Rozpoczęcie profilowania
-//            rs.startAsync();
-//
-//            // Wywołanie metody do profilowania
-//            client.fetchConstantData();
-//            return rs;
-//
-//        }
+
 
     }
 
