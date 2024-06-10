@@ -11,12 +11,12 @@ import java.util.*;
 @Service
 public class JsonGeneratorService {
     private static final Faker faker = new Faker();
-//    private static final Random random = new Random();
+    private final ObjectMapper objectmapper = new ObjectMapper();
 
     public String generateJson() {
         PositionDTO position = PositionDTO.builder()
                 ._type("Position")
-                .id(faker.random().nextInt(1000000))
+                .id(faker.random().nextInt(10000000))
                 .key(null)
                 .name(faker.name().fullName())
                 .airportCode(null)
@@ -27,26 +27,26 @@ public class JsonGeneratorService {
                         generateRandomCoordinate(-90,90),
                         generateRandomCoordinate(-180,180)
                 ))
-                .locationId(faker.random().nextInt(1000000))
+                .locationId(faker.random().nextInt(100000))
                 .inEurope(faker.random().nextBoolean())
                 .countryCode("PL")
                 .coreCountry(faker.random().nextBoolean())
                 .distance(null)
                 .build();
         try {
-            return new ObjectMapper().writeValueAsString(position);
+            return objectmapper.writeValueAsString(position);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
-    }public String[] generateJsonList(int size) {
+    }
+    public String[] generateJsonList(int size) {
 
         return Arrays.stream(new String[size])
                 .parallel()
                 .map(json -> generateJson())
                 .toArray(String[]::new);
     }
-    public double generateRandomCoordinate(double min, double max) {
+     public double generateRandomCoordinate(double min, double max) {
         return min + (max - min) * faker.random().nextDouble();
     }
 }

@@ -28,19 +28,18 @@ class CsvConverterServiceTest {
         this.csvConverterService = csvConverterService;
     }
 
-//    @BeforeEach
-//    public void setUp() {
-//        List<String> jsons = List.of("{\"_type\":\"Position\",\"id\":25,\"key\":null,\"name\":\"Palmer Hackett\",\"fullName\":\"Palmer Hackett Poland\",\"airportCode\":null,\"type\":\"location\",\"country\":\"Poland\",\"geoPosition\":{\"latitude\":100.0,\"longitude\":64.0},\"locationId\":36,\"inEurope\":true,\"countryCode\":\"PL\",\"coreCountry\":true,\"distance\":null}");
-//        PositionDTO position = PositionDTO.builder()
-//                ._type("Position")
-//                .id(25)
-//                .key(null)
-//                .name("Palmer Hackett")
-//                .fullName("Palmer Hackett Poland")
-//
-//
-//
-//    }
+    @BeforeEach
+    public void setUp() {
+        List<String> jsons = List.of("{\"_type\":\"Position\",\"id\":25,\"key\":null,\"name\":\"Palmer Hackett\",\"fullName\":\"Palmer Hackett Poland\",\"airportCode\":null,\"type\":\"location\",\"country\":\"Poland\",\"geoPosition\":{\"latitude\":100.0,\"longitude\":64.0},\"locationId\":36,\"inEurope\":true,\"countryCode\":\"PL\",\"coreCountry\":true,\"distance\":null}");
+        PositionDTO position = PositionDTO.builder()
+                ._type("Position")
+                .id(25)
+                .key(null)
+                .name("Palmer Hackett")
+                .fullName("Palmer Hackett Poland").build();
+
+
+    }
 
     @Test
     public void ShouldAddCorrectly() {

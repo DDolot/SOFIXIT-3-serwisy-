@@ -2,39 +2,38 @@ package com.rekrutacja.CsvConverter.Services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
 import com.rekrutacja.CsvConverter.DTOs.PositionDTO;
-import com.rekrutacja.CsvConverter.clients.*;
-import lombok.SneakyThrows;
+import com.rekrutacja.CsvConverter.clients.JsonGeneratorServiceClient;
 import net.objecthunter.exp4j.Expression;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.springframework.stereotype.Service;
-import net.objecthunter.exp4j.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
 public class CsvConverterService {
     private JsonGeneratorServiceClient client;
     private final ObjectMapper OM = new ObjectMapper();
+
     public CsvConverterService(JsonGeneratorServiceClient client) {
         this.client = client;
+
     }
 
-
-    public PositionDTO[] fetchData() {
-        String[] jsons = client.fetchJsonsFromFirstService();
-
+    public PositionDTO[] fetchData(int size) {
+        Instant now = Instant.now();
+        String[] jsons = client.fetchJsonsFromFirstService(size);
+        Instant now1 = Instant.now();
+        System.out.println(Duration.between(now, now1).toMillis());
+        System.out.println(jsons.length);
         PositionDTO[] positionDTOS = Arrays.stream(jsons)
                 .map(json -> {
                     try {
@@ -46,7 +45,6 @@ public class CsvConverterService {
 
         return positionDTOS;
     }
-
     public String convertToCSV(String[] columns,PositionDTO[] jsonData) {
         StringWriter csvData = new StringWriter();
         for (PositionDTO json : jsonData) {
@@ -55,9 +53,9 @@ public class CsvConverterService {
                 try {
                     Object columnValue = getColumnValue(json, column);
                     rowData.add(String.valueOf(columnValue));
+
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    rowData.add("N/A");
+                    throw new RuntimeException();
                 }
             }
             String row = String.join(",", rowData);
@@ -66,14 +64,9 @@ public class CsvConverterService {
         return csvData.toString();
     }
 
-    private Object getColumnValue(PositionDTO dto, String column) {
-
-        Map<String, Object> map = OM.convertValue(dto, new TypeReference<Map<String, Object>>() {
-        });
-        return map.get(column);
-    }
 
     public double[] calculate(String[] columns,PositionDTO[] jsonData) {
+
         int resultSize = jsonData.length;
         int expressionsSize = columns.length;
         double[] results = new double[resultSize * expressionsSize];
@@ -102,4 +95,10 @@ public class CsvConverterService {
     }
 
 
+    private Object getColumnValue(PositionDTO dto, String column) {
+
+        Map<String, Object> map = OM.convertValue(dto, new TypeReference<>() {
+        });
+        return map.get(column);
+    }
 }

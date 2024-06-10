@@ -37,7 +37,6 @@ public class PositionDTO {
     private String name;
 
     @JsonProperty
-    @Builder.Default
     private Boolean airportCode;
     @JsonProperty
     private String type;

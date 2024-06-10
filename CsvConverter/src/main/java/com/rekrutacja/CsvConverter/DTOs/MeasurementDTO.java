@@ -13,8 +13,8 @@ import java.util.StringJoiner;
 @AllArgsConstructor
 
 public class MeasurementDTO {
-    private List<Double> processCpuLoad;
-    private List<Double> usedMemorySize;
+    private List<String> processCpuLoad;
+    private List<String> usedMemorySize;
     private long time;
 }
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Measurements</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>Report</h1>
+
+<table border="1">
+    <caption>CSV convertion</caption>
+    <thead>
+    <tr>
+        <th>MEASUREMENTS</th>
+        <th>JsonGeneratorService</th>
+        <th>CsvConverterService</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>CPU usage</td>
+        <td th:text="${MeasurementForFirstService.get(0)}"></td>
+        <td th:text="${MeasurementForSecondService.get(0)}"></td>
+    </tr>
+
+
+
+    </tr>
+    <tr>
+        <td>Memory usage</td>
+        <td th:text="${MeasurementForFirstService.get(1)}"></td>
+        <td th:text="${MeasurementForSecondService.get(1)}"></td>
+        <td>hi</td>
+    </tr>
+    </tbody>
+</table>
+
+<table border="1">
+    <caption>Mathematical Operation</caption>
+    <thead>
+    <tr>
+        <th>MEASUREMENTS</th>
+        <th>JsonGeneratorService</th>
+        <th>CsvConverterService</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>CPU usage</td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(0)}"></td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(0)}"></td>
+    </tr>
+
+
+
+    </tr>
+    <tr>
+        <td>Memory usage</td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(1)}"></td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(1)}"></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+
+<table border="1">
+    <caption>Time of HTTP requests</caption>
+    <thead>
+    <tr>
+        <th>TIME 1 -> 2</th>
+        <th>TIME 2 -> 3</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(2)}"></td>
+        <td th:text="${time2to3}"></td>
+    </tr>
+</table>
+
+
+
+
+
+
+
+</body>
+</html>

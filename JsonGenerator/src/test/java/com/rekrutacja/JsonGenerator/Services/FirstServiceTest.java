@@ -21,9 +21,11 @@ class FirstServiceTest {
         jsonGeneratorService = new JsonGeneratorService();
     }
     @Test
+    @RepeatedTest(5)
     public void ShouldHaveProperStructureTest() throws JSONException {
         String randomJsonSample = jsonGeneratorService.generateJson();
-        Pattern compiledPattern = Pattern.compile("\\{\"_type\":\"Position\",\"id\":\\d+,\"key\":null,\"name\":\"[A-Za-z ]+\",\"fullName\":\"[A-Za-z ]+\",\"airportCode\":null,\"type\":\"location\",\"country\":\"Poland\",\"geoPosition\":\\{\"latitude\":[+-]?\\d*\\.?\\d+,\"longitude\":[+-]?\\d*\\.?\\d+},\"locationId\":\\d+,\"inEurope\":true,\"countryCode\":\"[A-Z]+\",\"coreCountry\":true,\"distance\":null}");
+        System.out.println(randomJsonSample);
+        Pattern compiledPattern = Pattern.compile("\\{\"_type\":\"Position\",\"id\":\\d+,\"key\":null,\"name\":\"[\\w\\s.']+\",\"fullName\":\"[\\w\\s.']+\",\"airportCode\":null,\"type\":\"location\",\"country\":\"Poland\",\"geoPosition\":\\{\"latitude\":[+-]?\\d*\\.?\\d+,\"longitude\":[+-]?\\d*\\.?\\d+},\"locationId\":\\d+,\"inEurope\":(true|false),\"countryCode\":\"[A-Z]+\",\"coreCountry\":(true|false),\"distance\":null}");
         Matcher matcher = compiledPattern.matcher(randomJsonSample);
 
         assertTrue("json structure is incorrect",matcher.matches());

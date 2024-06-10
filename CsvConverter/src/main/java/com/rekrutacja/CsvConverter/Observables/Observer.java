@@ -1,4 +1,4 @@
-package com.rekrutacja.CsvConverter.Services;
+package com.rekrutacja.CsvConverter.Observables;
 
 import com.rekrutacja.CsvConverter.DTOs.MeasurementDTO;
 
