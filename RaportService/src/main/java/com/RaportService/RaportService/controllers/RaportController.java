@@ -3,6 +3,7 @@ package com.RaportService.RaportService.controllers;
 import com.RaportService.RaportService.clients.SecondServiceClient;
 
 import com.RaportService.RaportService.services.RaportService;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.annotation.Repeatable;
@@ -50,17 +48,10 @@ public class RaportController {
         Instant finish = Instant.now();
         long duration = Duration.between(start, finish).toMillis() / 2;
 
-        model.addAttribute("MeasurementForFirstService",convert.getHeaders().get("MeasurementForFirstService"));
-        model.addAttribute("MeasurementForSecondService",convert.getHeaders().get("MeasurementForSecondService"));
-
-        model.addAttribute("MeasurementForFirstServiceCalculate",calculate.getHeaders().get("MeasurementForFirstService"));
-        model.addAttribute("MeasurementForSecondServiceCalculate",calculate.getHeaders().get("MeasurementForSecondService"));
-
-        model.addAttribute("time2to3",duration);
+        addModelAtributes(model, convert, calculate, duration);
 
 
-
-        return "hello";
+        return "raportView";
     }  @GetMapping("/10Kraport")
 
     public String raport10K(
@@ -74,21 +65,13 @@ public class RaportController {
         Instant finish = Instant.now();
         long duration = Duration.between(start, finish).toMillis() / 2;
 
-        model.addAttribute("MeasurementForFirstService",convert.getHeaders().get("MeasurementForFirstService"));
-        model.addAttribute("MeasurementForSecondService",convert.getHeaders().get("MeasurementForSecondService"));
-
-        model.addAttribute("MeasurementForFirstServiceCalculate",calculate.getHeaders().get("MeasurementForFirstService"));
-        model.addAttribute("MeasurementForSecondServiceCalculate",calculate.getHeaders().get("MeasurementForSecondService"));
-
-        model.addAttribute("time2to3",duration);
+        addModelAtributes(model, convert, calculate, duration);
 
 
-
-        return "hello";
+        return "raportView";
     }
 
     @GetMapping("/100Kraport")
-
     public String raport100K(
             @RequestParam String[] csvColumns,
             @RequestParam String[] mathOperations
@@ -100,20 +83,26 @@ public class RaportController {
         Instant finish = Instant.now();
         long duration = Duration.between(start, finish).toMillis() / 2;
 
-        model.addAttribute("MeasurementForFirstService",convert.getHeaders().get("MeasurementForFirstService"));
-        model.addAttribute("MeasurementForSecondService",convert.getHeaders().get("MeasurementForSecondService"));
-
-        model.addAttribute("MeasurementForFirstServiceCalculate",calculate.getHeaders().get("MeasurementForFirstService"));
-        model.addAttribute("MeasurementForSecondServiceCalculate",calculate.getHeaders().get("MeasurementForSecondService"));
-
-        model.addAttribute("time2to3",duration);
+        addModelAtributes(model, convert, calculate, duration);
 
 
-
-        return "hello";
+        return "raportView";
     }
 
 
+    private static void addModelAtributes(Model model, ResponseEntity<String> convert, ResponseEntity<double[]> calculate, long duration) {
+        model.addAttribute("MeasurementForFirstService", convert.getHeaders().get("MeasurementForFirstService"));
+        model.addAttribute("MeasurementForSecondService", convert.getHeaders().get("MeasurementForSecondService"));
 
+        model.addAttribute("MeasurementForFirstServiceCalculate", calculate.getHeaders().get("MeasurementForFirstService"));
+        model.addAttribute("MeasurementForSecondServiceCalculate", calculate.getHeaders().get("MeasurementForSecondService"));
+
+        model.addAttribute("time2to3", duration);
     }
+    @ExceptionHandler
+    private ResponseEntity<?> reportExeptionHandler(FeignException e){
+        return ResponseEntity.badRequest().body("Request problem,please check if column names are valid");
+    }
+
+}
 

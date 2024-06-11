@@ -2,7 +2,6 @@ package com.rekrutacja.JsonGenerator.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Data;
 

@@ -43,7 +43,11 @@
         <td>Memory usage</td>
         <td th:text="${MeasurementForFirstService.get(1)}"></td>
         <td th:text="${MeasurementForSecondService.get(1)}"></td>
-        <td>hi</td>
+    </tr>
+    <tr>
+        <td>Time of method execution within service</td>
+        <td>-</td>
+        <td th:text="${MeasurementForSecondService.get(2)}+ ' ms'"></td>
     </tr>
     </tbody>
 </table>
@@ -64,14 +68,17 @@
         <td th:text="${MeasurementForSecondServiceCalculate.get(0)}"></td>
     </tr>
 
-
-
-    </tr>
     <tr>
         <td>Memory usage</td>
         <td th:text="${MeasurementForFirstServiceCalculate.get(1)}"></td>
         <td th:text="${MeasurementForSecondServiceCalculate.get(1)}"></td>
-        <td></td>
+
+    </tr>
+
+    <tr>
+        <td>Time of method execution within service</td>
+        <td>-</td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(2)} + ' ms'"></td>
     </tr>
     </tbody>
 </table>
@@ -87,8 +94,8 @@
     </thead>
     <tbody>
     <tr>
-        <td th:text="${MeasurementForFirstServiceCalculate.get(2)}"></td>
-        <td th:text="${time2to3}"></td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(2)} + ' ms'"></td>
+        <td th:text="${time2to3} + ' ms'"></td>
     </tr>
 </table>
 

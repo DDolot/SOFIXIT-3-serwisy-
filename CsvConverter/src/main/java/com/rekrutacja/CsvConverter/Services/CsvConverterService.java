@@ -29,11 +29,7 @@ public class CsvConverterService {
     }
 
     public PositionDTO[] fetchData(int size) {
-        Instant now = Instant.now();
         String[] jsons = client.fetchJsonsFromFirstService(size);
-        Instant now1 = Instant.now();
-        System.out.println(Duration.between(now, now1).toMillis());
-        System.out.println(jsons.length);
         PositionDTO[] positionDTOS = Arrays.stream(jsons)
                 .map(json -> {
                     try {

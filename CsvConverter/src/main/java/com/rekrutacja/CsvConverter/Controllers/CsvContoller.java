@@ -26,8 +26,6 @@ public class CsvContoller {
 
     }
 
-
-
     @GetMapping(value = "/csv/constant/{size}")
     public ResponseEntity<String> StructuredCsv(
             @PathVariable int size
@@ -52,9 +50,6 @@ public class CsvContoller {
 
         MeasurementDTO fetch = observer.getFetch();
         MeasurementDTO convert = observer.getConvert();
-        System.out.println(fetch);
-        System.out.println(convert);
-
 
         return ResponseEntity.ok().headers(getHttpHeaders(fetch, convert)).body(csvData);
 

@@ -3,9 +3,6 @@ import com.rekrutacja.JsonGenerator.Services.JsonGeneratorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.time.Instant;
-
 @RestController
 public class JsonDataController {
 

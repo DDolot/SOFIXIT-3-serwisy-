@@ -85,8 +85,7 @@ import java.util.concurrent.CompletableFuture;
 
     @Override
     public MeasurementDTO getFetch() {
-
-        return fetch;
+            return fetch;
     }
 
     @Override
@@ -116,7 +115,7 @@ import java.util.concurrent.CompletableFuture;
 
 
             try {
-                Thread.sleep(250);
+                Thread.sleep(200);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -129,8 +128,6 @@ import java.util.concurrent.CompletableFuture;
         measurementDTO.setProcessCpuLoad(cpuLoads);
         measurementDTO.setUsedMemorySize(memory);
         measurementDTO.setTime(time);
-
-
 
         return measurementDTO;
     }
