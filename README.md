@@ -1,8 +1,8 @@
 ## SOFIXIT ZADANIE REKRUTACYJNE
-* [General info](#Treść)
+* [Treść](#Treść)
 * [ENDPOINTY](#EP)
-* [Technologies](#Technologie)
-* [Setup](#Instalacja)
+* [Technologie](#Technologie)
+* [Instalacja](#Instalacja)
 
 ## Treść
 
@@ -52,10 +52,11 @@ localhost:8082/raport/{size}K?csvColumns= ...&mathOperations= ... - wykonuje zap
 ## Instalacja 
 
 ```
-$ clone ...
+$ git clone https://github.com/DDolot/SOFIXIT-3-serwisy-.git
 ```
+w folderze z projektem komenda 
 ```
-$ clone ...
+$ docker compose up 
 ```
 
 
