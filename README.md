@@ -1,6 +1,6 @@
 ## SOFIXIT ZADANIE REKRUTACYJNE
 * [Treść](#Treść)
-* [ENDPOINTY](#EP)
+* [ENDPOINTY](#ENDPOINTY)
 * [Technologie](#Technologie)
 * [Instalacja](#Instalacja)
 
