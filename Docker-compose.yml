@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  json-generator-service:
+    image: jsonservice:latest
+    ports:
+      - "8080:8080"
+
+
+
+  csv-converter-service:
+    image: csvservice:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - APPLICATION_CONFIG_HOSTNAME=json-generator-service
+
+
+
+
+  raport-service:
+    image: raportservice:latest
+    ports:
+      - "8082:8082"
+    environment:
+      - APPLICATION_CONFIG_HOSTNAME=csv-converter-service
+

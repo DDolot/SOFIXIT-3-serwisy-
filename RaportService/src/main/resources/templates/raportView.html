@@ -32,8 +32,8 @@
     <tbody>
     <tr>
         <td>CPU usage</td>
-        <td th:text="${MeasurementForFirstService.get(0)}"></td>
-        <td th:text="${MeasurementForSecondService.get(0)}"></td>
+        <td th:text="${MeasurementForFirstService.get(2)}"></td>
+        <td th:text="${MeasurementForSecondService.get(2)}"></td>
     </tr>
 
 
@@ -47,7 +47,7 @@
     <tr>
         <td>Time of method execution within service</td>
         <td>-</td>
-        <td th:text="${MeasurementForSecondService.get(2)}+ ' ms'"></td>
+        <td th:text="${MeasurementForSecondService.get(0)}+ ' ms'"></td>
     </tr>
     </tbody>
 </table>
@@ -64,8 +64,8 @@
     <tbody>
     <tr>
         <td>CPU usage</td>
-        <td th:text="${MeasurementForFirstServiceCalculate.get(0)}"></td>
-        <td th:text="${MeasurementForSecondServiceCalculate.get(0)}"></td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(2)}"></td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(2)}"></td>
     </tr>
 
     <tr>
@@ -78,7 +78,7 @@
     <tr>
         <td>Time of method execution within service</td>
         <td>-</td>
-        <td th:text="${MeasurementForSecondServiceCalculate.get(2)} + ' ms'"></td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(0)} + ' ms'"></td>
     </tr>
     </tbody>
 </table>
@@ -94,7 +94,7 @@
     </thead>
     <tbody>
     <tr>
-        <td th:text="${MeasurementForFirstServiceCalculate.get(2)} + ' ms'"></td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(0)} + ' ms'"></td>
         <td th:text="${time2to3} + ' ms'"></td>
     </tr>
 </table>

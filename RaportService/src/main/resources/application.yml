@@ -8,8 +8,8 @@ server:
             - "^"
             - "+"
 application:
-    config:
-        json-url: http://localhost:8081
+  config:
+    hostname: localhost
 spring:
     thymeleaf:
         prefix: classpath:/templates/

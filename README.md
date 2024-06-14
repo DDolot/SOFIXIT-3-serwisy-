@@ -1,4 +1,11 @@
-Test
+## SOFIXIT ZADANIE REKRUTACYJNE
+* [General info](#Treść)
+* [ENDPOINTY](#EP)
+* [Technologies](#Technologie)
+* [Setup](#Instalacja)
+
+## Treść
+
 Trzy serwisy.
 1. Serwis który zwraca pod adresem ‘/generate/json/{size}’ listę jsonow o wskazanym rozmiarze
    oraz o strukturze poniżej z losowymi wartościami.
@@ -19,3 +26,37 @@ Trzy serwisy.
    Raport na 1k,10k,100k wygenerowanych jsonow.
    Technologie dowolne.
    Projekt na githubie.
+
+## ENDPOINTY 
+
+localhost:8080/generate/json/{size} - lista jsonów o wskazanym rozmiarze
+
+localhost:8081/csv/constant/{size} - dane w formacie ‘type, _id, name, type, latitude, longitude’
+
+localhost:8081/csv/structure/{size}?params= ...  - pobrane dane w danej strukturze csv
+
+localhost:8081/csv/calculate/{size}?params= ... - operacje matematyczne na danych 
+
+localhost:8082/raport/{size}K?csvColumns= ...&mathOperations= ... - wykonuje zapytania pod dwa EP wyżej(tj. structure i calculate) oraz generuje raport dla podanej ilości json 
+
+## Technologie
+
+* Spring boot 3.1
+* Java 17+
+* REST API
+* AOP/OOP
+* Asynchroniczność
+* GIT
+* Docker
+
+## Instalacja 
+
+```
+$ clone ...
+```
+```
+$ clone ...
+```
+
+
+

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "json-service",url = "${application.config.json-url}")
+@FeignClient(name = "json-service",url = "http://${application.config.hostname}:8081")
 public interface SecondServiceClient {
 
     @GetMapping("/csv/structure/{size}")
