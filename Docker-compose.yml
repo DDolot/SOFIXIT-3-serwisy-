@@ -2,6 +2,8 @@ version: "3"
 
 services:
   json-generator-service:
+    build:
+      context: ./JsonGenerator
     image: jsonservice:latest
     ports:
       - "8080:8080"
@@ -9,6 +11,8 @@ services:
 
 
   csv-converter-service:
+    build:
+      context: ./CsvConverter
     image: csvservice:latest
     ports:
       - "8081:8081"
@@ -19,6 +23,8 @@ services:
 
 
   raport-service:
+    build:
+      context: ./RaportService
     image: raportservice:latest
     ports:
       - "8082:8082"
