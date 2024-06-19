@@ -107,7 +107,7 @@ import java.util.concurrent.CompletableFuture;
 
         while (!future.isDone()) {
 
-            double cpuLoad = OSBEAN.getSystemCpuLoad();
+            double cpuLoad = OSBEAN.getCpuLoad();
 
             long usedMemory = totalMemory - OSBEAN.getFreeMemorySize();
             cpuLoads.add(String.format("%.2f%%", cpuLoad));
