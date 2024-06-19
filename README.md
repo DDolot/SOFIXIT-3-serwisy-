@@ -56,7 +56,7 @@ $ git clone https://github.com/DDolot/SOFIXIT-3-serwisy-.git
 ```
 w folderze z projektem komenda 
 ```
-$ docker compose up 
+$ docker-compose up --build
 ```
 
 
