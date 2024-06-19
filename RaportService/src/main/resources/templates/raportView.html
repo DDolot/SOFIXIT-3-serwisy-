@@ -32,8 +32,8 @@
     <tbody>
     <tr>
         <td>CPU usage</td>
-        <td th:text="${MeasurementForFirstService.get(2)}"></td>
-        <td th:text="${MeasurementForSecondService.get(2)}"></td>
+        <td th:text="${MeasurementForFirstService.get(0)}"></td>
+        <td th:text="${MeasurementForSecondService.get(0)}"></td>
     </tr>
 
 
@@ -47,11 +47,25 @@
     <tr>
         <td>Time of method execution within service</td>
         <td>-</td>
-        <td th:text="${MeasurementForSecondService.get(0)}+ ' ms'"></td>
+        <td th:text="${MeasurementForSecondService.get(2)}+ ' ms'"></td>
     </tr>
     </tbody>
 </table>
+<table border="1">
+    <caption>Time of HTTP requests</caption>
+    <thead>
+    <tr>
+        <th>TIME 1 -> 2</th>
+        <th>TIME 2 -> 3</th>
 
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${MeasurementForFirstService.get(2)} + ' ms'"></td>
+        <td th:text="${time2to3Convert} + ' ms'"></td>
+    </tr>
+</table>
 <table border="1">
     <caption>Mathematical Operation</caption>
     <thead>
@@ -64,8 +78,8 @@
     <tbody>
     <tr>
         <td>CPU usage</td>
-        <td th:text="${MeasurementForFirstServiceCalculate.get(2)}"></td>
-        <td th:text="${MeasurementForSecondServiceCalculate.get(2)}"></td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(0)}"></td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(0)}"></td>
     </tr>
 
     <tr>
@@ -78,7 +92,7 @@
     <tr>
         <td>Time of method execution within service</td>
         <td>-</td>
-        <td th:text="${MeasurementForSecondServiceCalculate.get(0)} + ' ms'"></td>
+        <td th:text="${MeasurementForSecondServiceCalculate.get(2)} + ' ms'"></td>
     </tr>
     </tbody>
 </table>
@@ -94,8 +108,8 @@
     </thead>
     <tbody>
     <tr>
-        <td th:text="${MeasurementForFirstServiceCalculate.get(0)} + ' ms'"></td>
-        <td th:text="${time2to3} + ' ms'"></td>
+        <td th:text="${MeasurementForFirstServiceCalculate.get(2)} + ' ms'"></td>
+        <td th:text="${time2to3Calculate} + ' ms'"></td>
     </tr>
 </table>
 

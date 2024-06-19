@@ -54,10 +54,8 @@ localhost:8082/raport/{size}K?csvColumns= ...&mathOperations= ... - wykonuje zap
 ```
 $ git clone https://github.com/DDolot/SOFIXIT-3-serwisy-.git
 ```
-w folderze z projektem komenda 
+w folderze głównym komenda
 ```
 $ docker-compose up --build
 ```
-
-
 
